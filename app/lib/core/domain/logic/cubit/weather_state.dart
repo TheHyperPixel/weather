@@ -21,12 +21,12 @@ class WeatherStateLoading extends WeatherState {
 }
 
 class WeatherStateSuccess extends WeatherState {
-  final Weather weather;
+  final Set<Location> locations;
 
   const WeatherStateSuccess({
     super.unitType,
     super.cityType,
-    required this.weather,
+    required this.locations,
   });
 }
 

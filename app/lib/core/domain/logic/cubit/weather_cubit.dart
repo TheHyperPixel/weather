@@ -1,3 +1,4 @@
+import 'package:app/core/domain/entities/location.dart';
 import 'package:app/core/domain/entities/weather.dart';
 import 'package:app/core/domain/enums/city_type.dart';
 import 'package:app/core/domain/enums/unit_type.dart';
@@ -17,20 +18,41 @@ class WeatherCubit extends Cubit<WeatherState> {
     this._weatherRepository,
   ) : super(WeatherStateInitial());
 
-  loadWeather({required CityType cityType}) async {
+  loadAllWeather() async {
     try {
-      emit(WeatherStateLoading(cityType: cityType));
-      final Weather _weather = await _weatherRepository.getWeather(
+      Set<Location> _locations = {};
+      for (CityType _cityType in CityType.values) {
+        try {
+          Location _location = Location(
+            uuid: _cityType.index.toString(),
+            cityType: _cityType,
+            weather: await _loadWeather(cityType: _cityType),
+          );
+          _locations.add(_location);
+        } catch (e) {
+          //gracefully ignore single location weather API error
+        }
+      }
+
+      if (_locations.isNotEmpty) {
+        emit(WeatherStateSuccess(locations: _locations));
+        return;
+      }
+      emit(const WeatherStateFailure());
+    } catch (e) {
+      emit(const WeatherStateFailure());
+    }
+  }
+
+  Future<Weather> _loadWeather({required CityType cityType}) async {
+    try {
+      return await _weatherRepository.getWeather(
         lat: cityType.coordinate.lat,
         lon: cityType.coordinate.lon,
         unit: _unitType.name,
       );
-      emit(WeatherStateSuccess(
-        cityType: cityType,
-        weather: _weather,
-      ));
     } catch (e) {
-      emit(WeatherStateFailure(cityType: cityType));
+      rethrow;
     }
   }
 

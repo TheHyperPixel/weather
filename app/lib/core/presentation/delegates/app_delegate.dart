@@ -1,5 +1,6 @@
 import 'package:app/core/domain/logic/cubit/weather_cubit.dart';
-import 'package:app/core/presentation/screens/main_screen.dart';
+import 'package:app/core/presentation/delegates/app_routes_delegate.dart';
+import 'package:app/core/presentation/styles/app_colors_scheme_base.dart';
 import 'package:app/injector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,13 +22,15 @@ class AppDelegate extends StatefulWidget {
 }
 
 class _AppDelegateState extends State<AppDelegate> {
+  late GlobalKey<NavigatorState> _navigatorKey;
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         Provider.value(value: unauthenticatedRouteObserver),
         BlocProvider(
-          create: (context) => getIt<WeatherCubit>(),
+          create: (context) => getIt<WeatherCubit>()..loadAllWeather(),
           lazy: false,
         ),
       ],
@@ -55,7 +58,36 @@ class _AppDelegateState extends State<AppDelegate> {
         },
         home: Builder(
           builder: (context) {
-            return const MainScreen();
+            AppColorsSchemeBase _colorScheme = const AppColorsSchemeLight();
+
+            return AppColorsDelegate(
+              appColorsScheme: _colorScheme,
+              child: WillPopScope(
+                onWillPop: () async {
+                  if (this._navigatorKey.currentState!.canPop()) {
+                    this._navigatorKey.currentState!.pop();
+                    return false;
+                  } else {
+                    return true;
+                  }
+                },
+                child: Navigator(
+                  key: this._navigatorKey,
+                  observers: [
+                    authenticatedRouteObserver,
+                  ],
+                  initialRoute: AppRoutesDelegate.main,
+                  onGenerateRoute: AppRoutesDelegate.getAppRoutes,
+                  onGenerateInitialRoutes: (navigator, initialRoute) {
+                    return [
+                      AppRoutesDelegate.getAppRoutes(
+                        RouteSettings(name: initialRoute),
+                      )
+                    ];
+                  },
+                ),
+              ),
+            );
           },
         ),
       ),
