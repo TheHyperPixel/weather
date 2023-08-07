@@ -20,8 +20,14 @@ class FirebaseAuthenticationRepository implements IWeatherRepository {
   }) async {
     try {
       Map<String, dynamic> _map = await this.apiClient.get(
-          apiEndpoint:
-              'weather?lat=$lat&lon=$lon&unit=$unit&appid=${DataConstants.appId}');
+        apiEndpoint: '/data/2.5/weather',
+        apiQueryParams: {
+          'lat': lat.toString(),
+          'lon': lon.toString(),
+          'unit': unit,
+          'appid': DataConstants.appId.toString(),
+        },
+      );
 
       return WeatherDto.toEntity(map: _map);
     } catch (e) {

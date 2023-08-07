@@ -5,8 +5,8 @@ class Weather extends Entity {
   final double tempMin;
   final double tempMax;
   final double feelsLike;
-  final double pressure;
-  final double humidity;
+  final int pressure;
+  final int humidity;
   final double windSpeed;
   final int windDegree;
   final int cloudCoverage;

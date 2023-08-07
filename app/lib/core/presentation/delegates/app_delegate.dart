@@ -10,9 +10,7 @@ import 'package:app/core/presentation/styles/app_colors_delegate.dart';
 import 'package:app/core/presentation/styles/app_colors_scheme_light.dart';
 import 'package:provider/provider.dart';
 
-RouteObserver authenticatedRouteObserver = RouteObserver();
-
-RouteObserver unauthenticatedRouteObserver = RouteObserver();
+RouteObserver routeObserver = RouteObserver();
 
 class AppDelegate extends StatefulWidget {
   const AppDelegate({Key? key}) : super(key: key);
@@ -22,13 +20,13 @@ class AppDelegate extends StatefulWidget {
 }
 
 class _AppDelegateState extends State<AppDelegate> {
-  late GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider.value(value: unauthenticatedRouteObserver),
+        Provider.value(value: routeObserver),
         BlocProvider(
           create: (context) => getIt<WeatherCubit>()..loadAllWeather(),
           lazy: false,
@@ -74,7 +72,7 @@ class _AppDelegateState extends State<AppDelegate> {
                 child: Navigator(
                   key: this._navigatorKey,
                   observers: [
-                    authenticatedRouteObserver,
+                    routeObserver,
                   ],
                   initialRoute: AppRoutesDelegate.main,
                   onGenerateRoute: AppRoutesDelegate.getAppRoutes,

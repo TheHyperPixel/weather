@@ -21,7 +21,7 @@ class WeatherCubit extends Cubit<WeatherState> {
   loadAllWeather() async {
     try {
       Set<Location> _locations = {};
-      for (CityType _cityType in CityType.values) {
+      for (CityType _cityType in [CityType.london]) {
         try {
           Location _location = Location(
             uuid: _cityType.index.toString(),
