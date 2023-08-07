@@ -1,0 +1,1 @@
+class UserIdentityNotFoundException implements Exception {}

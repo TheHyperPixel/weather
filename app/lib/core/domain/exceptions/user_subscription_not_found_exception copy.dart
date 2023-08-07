@@ -1,0 +1,1 @@
+class UserSubscriptionNotFoundException implements Exception {}

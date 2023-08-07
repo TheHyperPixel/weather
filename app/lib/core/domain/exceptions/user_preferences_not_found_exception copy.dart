@@ -1,0 +1,1 @@
+class UserPreferencesNotFoundException implements Exception {}
