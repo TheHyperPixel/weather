@@ -8,7 +8,7 @@ import 'package:app/core/presentation/delegates/app_unauthenticated_delegate.dar
 import 'package:app/core/presentation/localizations/app_localizations.dart';
 import 'package:app/core/presentation/styles/app_colors_delegate.dart';
 import 'package:app/core/presentation/styles/app_colors_scheme_light.dart';
-import 'package:app/features/sync/presentation/screen/sync_screen.dart';
+import 'package:app/core/presentation/screens/sync_screen.dart';
 import 'package:app/injector.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

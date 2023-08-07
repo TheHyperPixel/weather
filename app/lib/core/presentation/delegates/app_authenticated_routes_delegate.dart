@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:app/features/master/presentation/screen/master_screen.dart';
-import 'package:app/features/sync/presentation/screen/sync_screen.dart';
+import 'package:app/core/presentation/screens/master_screen.dart';
+import 'package:app/core/presentation/screens/sync_screen.dart';
 
 class AppAuthenticatedRoutesDelegate {
   static const String root = '/';
