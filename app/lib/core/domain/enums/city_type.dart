@@ -16,7 +16,7 @@ extension CityTypeExtension on CityType {
       case CityType.london:
         return const Coordinate(lat: 51.5072, lon: 0.1276);
       case CityType.glasgow:
-        return const Coordinate(lat: 55.8617, lon: 4.2583);
+        return const Coordinate(lat: 55.8617, lon: -4.2583);
       case CityType.manchester:
         return const Coordinate(lat: 53.4808, lon: 2.2426);
     }

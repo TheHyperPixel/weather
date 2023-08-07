@@ -45,16 +45,19 @@ class AppLocalizations {
         name: 'cityTypeTitleNorwich',
         desc: 'Name for location enum Norwich',
       );
+
   String get cityTypeTitleLondon => Intl.message(
         'London',
         name: 'cityTypeTitleLondon',
         desc: 'Name for location enum London',
       );
+
   String get cityTypeTitleGlasgow => Intl.message(
         'Glasgow',
         name: 'cityTypeTitleGlasgow',
         desc: 'Name for location enum Glasgow',
       );
+
   String get cityTypeTitleManchester => Intl.message(
         'Manchester',
         name: 'cityTypeTitleManchester',
@@ -66,10 +69,41 @@ class AppLocalizations {
         name: 'feelsLike',
         desc: 'feelsLike',
       );
+
   String get highsLows => Intl.message(
         'Highs / Lows',
         name: 'highsLows',
         desc: 'highsLows',
+      );
+
+  String get mapTileTypeClouds => Intl.message(
+        'Clouds',
+        name: 'mapTileTypeClouds',
+        desc: 'mapTileTypeClouds',
+      );
+
+  String get mapTileTypeTemperature => Intl.message(
+        'Temperature',
+        name: 'mapTileTypeTemperature',
+        desc: 'mapTileTypeTemperature',
+      );
+
+  String get mapTileTypePrecipitation => Intl.message(
+        'Precipitation',
+        name: 'mapTileTypePrecipitation',
+        desc: 'mapTileTypePrecipitation',
+      );
+
+  String get mapTileTypeWind => Intl.message(
+        'Wind',
+        name: 'mapTileTypeWind',
+        desc: 'mapTileTypeWind',
+      );
+
+  String get mapTileTypePressure => Intl.message(
+        'Pressure',
+        name: 'mapTileTypePressure',
+        desc: 'mapTileTypePressure',
       );
 }
 

@@ -6,6 +6,7 @@ import 'package:app/core/presentation/constants/presentation_constants.dart';
 import 'package:app/core/presentation/delegates/app_routes_delegate.dart';
 import 'package:app/core/presentation/extensions/string_extensions.dart';
 import 'package:app/core/presentation/localizations/app_localizations.dart';
+import 'package:app/core/presentation/styles/app_border_radius.dart';
 import 'package:app/core/presentation/styles/app_colors_delegate.dart';
 import 'package:app/core/presentation/styles/app_text_styles.dart';
 import 'package:flutter/widgets.dart';
@@ -32,11 +33,7 @@ class LocationListingItem extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         decoration: BoxDecoration(
           color: AppColorsDelegate.of(context).white,
-          border: Border(
-            bottom: BorderSide(
-              color: AppColorsDelegate.of(context).slate.withOpacity(0.25),
-            ),
-          ),
+          borderRadius: const AppBorderRadius.small(),
         ),
         child: Row(
           children: [

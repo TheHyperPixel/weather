@@ -15,5 +15,5 @@ class AppBorderRadius extends BorderRadius {
 
   const AppBorderRadius.button() : super.all(const Radius.circular(20.0));
 
-  const AppBorderRadius.small() : super.all(const Radius.circular(1.5));
+  const AppBorderRadius.small() : super.all(const Radius.circular(10));
 }
