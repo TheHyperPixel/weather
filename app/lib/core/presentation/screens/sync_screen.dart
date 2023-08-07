@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app/core/presentation/components/app_screen/app_screen.dart';
+import 'package:app/core/presentation/components/app_screen.dart';
 import 'package:app/core/presentation/styles/app_colors_delegate.dart';
 
 final syncScreenKey = GlobalKey();

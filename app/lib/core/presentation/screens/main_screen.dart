@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:app/core/presentation/components/app_screen/app_screen.dart';
+import 'package:app/core/presentation/components/app_screen.dart';
 import 'package:app/core/presentation/styles/app_colors_delegate.dart';
 
-class MasterScreen extends StatelessWidget {
-  const MasterScreen({
+class MainScreen extends StatelessWidget {
+  const MainScreen({
     super.key,
   });
 

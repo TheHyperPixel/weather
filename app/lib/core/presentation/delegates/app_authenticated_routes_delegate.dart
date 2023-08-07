@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app/core/presentation/screens/master_screen.dart';
+import 'package:app/core/presentation/screens/main_screen.dart';
 import 'package:app/core/presentation/screens/sync_screen.dart';
 
 class AppAuthenticatedRoutesDelegate {
@@ -10,7 +10,7 @@ class AppAuthenticatedRoutesDelegate {
 
     switch (settings.name) {
       case AppAuthenticatedRoutesDelegate.root:
-        builder = (BuildContext _) => const MasterScreen();
+        builder = (BuildContext _) => const MainScreen();
         break;
 
       default:

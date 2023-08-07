@@ -11,30 +11,9 @@ Future<void> configureAppDependencies() => getIt.init();
 
 @module
 abstract class RegisterModule {
-  @singleton
+  @injectable
   ApiClient get apiClient => ApiClient();
-  // @singleton
-  // FirebaseAnalytics get firebaseAnalytics =>
-  //     FirebaseAnalytics.instance..setAnalyticsCollectionEnabled(kReleaseMode);
-
-  // @singleton
-  // FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
-
-  // @singleton
-  // FirebaseFirestore get firestore => FirebaseFirestore.instance;
-
-  // @singleton
-  // FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
-
-  // @singleton
-  // FirebaseRemoteConfig get remoteConfig => FirebaseRemoteConfig.instance;
 
   @preResolve
   Future<PackageInfo> get packageInfo => PackageInfo.fromPlatform();
-
-  // @factory
-  // ApiClient get apiClient => tapdatCoreGetIt<ApiClient>(
-  //       param1: 'a', //Constants.appApiBase,
-  //       param2: 'b', //Constants.appApiRoot,
-  //     );
 }
