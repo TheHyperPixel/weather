@@ -21,7 +21,7 @@ class WeatherStateLoading extends WeatherState {
 }
 
 class WeatherStateSuccess extends WeatherState {
-  final Set<Location> locations;
+  final List<Location> locations;
 
   const WeatherStateSuccess({
     super.unitType,

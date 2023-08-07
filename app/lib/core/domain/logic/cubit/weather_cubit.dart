@@ -4,8 +4,8 @@ import 'package:app/core/domain/enums/city_type.dart';
 import 'package:app/core/domain/enums/unit_type.dart';
 import 'package:app/core/domain/repositories/i_weather_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
 
 part 'weather_state.dart';
 
@@ -31,11 +31,14 @@ class WeatherCubit extends Cubit<WeatherState> {
           _locations.add(_location);
         } catch (e) {
           //gracefully ignore single location weather API error
+          if (kDebugMode) {
+            print(e);
+          }
         }
       }
 
       if (_locations.isNotEmpty) {
-        emit(WeatherStateSuccess(locations: _locations));
+        emit(WeatherStateSuccess(locations: _locations.toList()));
         return;
       }
       emit(const WeatherStateFailure());
@@ -46,11 +49,13 @@ class WeatherCubit extends Cubit<WeatherState> {
 
   Future<Weather> _loadWeather({required CityType cityType}) async {
     try {
-      return await _weatherRepository.getWeather(
+      Weather _weather = await _weatherRepository.getWeather(
         lat: cityType.coordinate.lat,
         lon: cityType.coordinate.lon,
         unit: _unitType.name,
       );
+      _weather = _weather.copyWith(unitType: _unitType);
+      return _weather;
     } catch (e) {
       rethrow;
     }

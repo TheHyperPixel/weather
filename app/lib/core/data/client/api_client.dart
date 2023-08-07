@@ -12,6 +12,9 @@ class ApiClient {
       required Map<String, dynamic> apiQueryParams}) async {
     try {
       Uri url = Uri.https(apiBaseUrl, apiEndpoint, apiQueryParams);
+      if (kDebugMode) {
+        print('Request:$url');
+      }
 
       var response = await http.get(url);
       if (kDebugMode) {

@@ -9,7 +9,7 @@ class WeatherDto {
 
     double _windSpeed = 0;
     if (map.containsKey('wind')) {
-      _windSpeed = map['wind']['speed'];
+      _windSpeed = double.parse(map['wind']['speed'].toString());
     }
 
     int _windDegree = 0;
@@ -24,16 +24,19 @@ class WeatherDto {
 
     return Weather(
       uuid: map['dt'].toString(),
-      temp: map['main']['temp'],
-      tempMin: map['main']['temp_min'],
-      tempMax: map['main']['temp_max'],
-      feelsLike: map['main']['feels_like'],
+      temp: double.parse(map['main']['temp'].toString()),
+      tempMin: double.parse(map['main']['temp_min'].toString()),
+      tempMax: double.parse(map['main']['temp_max'].toString()),
+      feelsLike: double.parse(map['main']['feels_like'].toString()),
       pressure: map['main']['pressure'],
       humidity: map['main']['humidity'],
       windSpeed: _windSpeed,
       windDegree: _windDegree,
       cloudCoverage: _cloudCoverage,
       visibility: _visibility,
+      principle: map['weather'][0]['main'],
+      description: map['weather'][0]['description'],
+      icon: map['weather'][0]['icon'],
     );
   }
 }

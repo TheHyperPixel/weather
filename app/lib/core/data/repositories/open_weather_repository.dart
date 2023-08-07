@@ -24,7 +24,7 @@ class FirebaseAuthenticationRepository implements IWeatherRepository {
         apiQueryParams: {
           'lat': lat.toString(),
           'lon': lon.toString(),
-          'unit': unit,
+          'units': unit,
           'appid': DataConstants.appId.toString(),
         },
       );

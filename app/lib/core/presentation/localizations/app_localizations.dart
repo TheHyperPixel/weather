@@ -23,7 +23,7 @@ class AppLocalizations {
   }
 
   String get appName => Intl.message(
-        'App',
+        'Hyper Weather App',
         name: 'appName',
         desc: 'The name of the app',
       );
@@ -38,6 +38,27 @@ class AppLocalizations {
         'Copyright 2023',
         name: 'copyrightText',
         desc: 'Copyright text on the settings screen',
+      );
+
+  String get cityTypeTitleNorwich => Intl.message(
+        'Norwich',
+        name: 'cityTypeTitleNorwich',
+        desc: 'Name for location enum Norwich',
+      );
+  String get cityTypeTitleLondon => Intl.message(
+        'London',
+        name: 'cityTypeTitleLondon',
+        desc: 'Name for location enum London',
+      );
+  String get cityTypeTitleGlasgow => Intl.message(
+        'Glasgow',
+        name: 'cityTypeTitleGlasgow',
+        desc: 'Name for location enum Glasgow',
+      );
+  String get cityTypeTitleManchester => Intl.message(
+        'Manchester',
+        name: 'cityTypeTitleManchester',
+        desc: 'Copyright Name for location enum Manchester',
       );
 }
 
