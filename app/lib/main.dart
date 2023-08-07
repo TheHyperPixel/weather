@@ -10,24 +10,7 @@ void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // await Firebase.initializeApp(
-    //   name: 'we-love-pets-app',
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
-
-    if (kIsWeb) {
-      // FirebaseFirestore.instance.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
-    } else {
-      // FirebaseFirestore.instance.settings = const Settings(
-      //   persistenceEnabled: true,
-      //   cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-      // );
-    }
-    // await FirebaseAppCheck.instance.activate();
-
     await configureAppDependencies();
-
-    // setupCrashReporting();
 
     Bloc.observer = getIt<AppBlocObserver>();
 
@@ -35,9 +18,6 @@ void main() async {
   }, (exception, stack, {context}) {
     if (!kReleaseMode) {
       print(exception);
-    }
-    if (!kIsWeb) {
-      // FirebaseCrashlytics.instance.recordError(exception, stack);
     }
   });
 }

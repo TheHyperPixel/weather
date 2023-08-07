@@ -1,4 +1,4 @@
-import 'package:app/core/domain/logic/cubit/weather_cubit.dart';
+import 'package:app/core/domain/logic/weather/weather_cubit.dart';
 import 'package:app/core/presentation/delegates/app_routes_delegate.dart';
 import 'package:app/core/presentation/styles/app_colors_scheme_base.dart';
 import 'package:app/injector.dart';
@@ -35,7 +35,7 @@ class _AppDelegateState extends State<AppDelegate> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (context) {
-          return AppLocalizations.of(context).appName;
+          return AppLocalizations.of(context).applicationName;
         },
         localizationsDelegates: const [
           AppLocalizations.delegate,

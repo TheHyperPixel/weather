@@ -22,13 +22,13 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  String get appName => Intl.message(
-        'Hyper Weather App',
-        name: 'appName',
+  String get applicationName => Intl.message(
+        'Hyper Weather',
+        name: 'applicationName',
         desc: 'The name of the app',
       );
 
-  String get tapDatLtdName => Intl.message(
+  String get companyName => Intl.message(
         'Hyper Pixel Ltd',
         name: 'hyperPixelLtdName',
         desc: 'The name of the company',
@@ -59,6 +59,17 @@ class AppLocalizations {
         'Manchester',
         name: 'cityTypeTitleManchester',
         desc: 'Copyright Name for location enum Manchester',
+      );
+
+  String get feelsLike => Intl.message(
+        'Feels like',
+        name: 'feelsLike',
+        desc: 'feelsLike',
+      );
+  String get highsLows => Intl.message(
+        'Highs / Lows',
+        name: 'highsLows',
+        desc: 'highsLows',
       );
 }
 

@@ -45,9 +45,9 @@ class AppTextStyles extends TextStyle {
   AppTextStyles.excerpt({required BuildContext context})
       : super(
           fontFamily: 'Outfit',
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-          letterSpacing: -0.1,
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
+          letterSpacing: -0.15,
           height: 1.25,
           color: AppColorsDelegate.of(context).coal,
         );

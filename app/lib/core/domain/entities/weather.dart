@@ -16,6 +16,7 @@ class Weather extends Entity {
   final String description;
   final String icon;
   final UnitType unitType;
+  final DateTime dateTime;
 
   Weather({
     required super.uuid,
@@ -33,6 +34,7 @@ class Weather extends Entity {
     required this.description,
     required this.icon,
     this.unitType = UnitType.metric,
+    required this.dateTime,
   });
 
   Weather copyWith({
@@ -50,6 +52,7 @@ class Weather extends Entity {
     String? description,
     String? icon,
     UnitType? unitType,
+    DateTime? dateTime,
   }) {
     return Weather(
       uuid: super.uuid,
@@ -66,6 +69,8 @@ class Weather extends Entity {
       principle: principle ?? this.principle,
       description: description ?? this.description,
       icon: icon ?? this.icon,
+      unitType: unitType ?? this.unitType,
+      dateTime: dateTime ?? this.dateTime,
     );
   }
 }

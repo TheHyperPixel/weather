@@ -21,13 +21,15 @@ class WeatherCubit extends Cubit<WeatherState> {
   loadAllWeather() async {
     try {
       Set<Location> _locations = {};
-      for (CityType _cityType in [CityType.london]) {
+      for (CityType _cityType in CityType.values) {
         try {
           Location _location = Location(
             uuid: _cityType.index.toString(),
             cityType: _cityType,
             weather: await _loadWeather(cityType: _cityType),
+            forecast: await _loadForecast(cityType: _cityType),
           );
+          _location.forecast.sort((a, b) => a.dateTime.compareTo(b.dateTime));
           _locations.add(_location);
         } catch (e) {
           //gracefully ignore single location weather API error
@@ -56,6 +58,19 @@ class WeatherCubit extends Cubit<WeatherState> {
       );
       _weather = _weather.copyWith(unitType: _unitType);
       return _weather;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Weather>> _loadForecast({required CityType cityType}) async {
+    try {
+      List<Weather> _forecast = await _weatherRepository.getForecast(
+        lat: cityType.coordinate.lat,
+        lon: cityType.coordinate.lon,
+        unit: _unitType.name,
+      );
+      return _forecast.map((e) => e.copyWith(unitType: _unitType)).toList();
     } catch (e) {
       rethrow;
     }

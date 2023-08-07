@@ -1,8 +1,8 @@
 import 'package:app/core/domain/entities/location.dart';
-import 'package:app/core/domain/logic/cubit/weather_cubit.dart';
+import 'package:app/core/domain/logic/weather/weather_cubit.dart';
 import 'package:app/core/presentation/fragments/location_listing_item.dart';
+import 'package:app/core/presentation/fragments/nav_bar.dart';
 import 'package:app/core/presentation/localizations/app_localizations.dart';
-import 'package:app/core/presentation/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/components/app_screen.dart';
 import 'package:app/core/presentation/styles/app_colors_delegate.dart';
@@ -18,25 +18,7 @@ class MainScreen extends StatelessWidget {
     return AppScreen(
       child: Column(
         children: [
-          Container(
-            color: AppColorsDelegate.of(context).white,
-            child: SafeArea(
-              bottom: false,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        AppLocalizations.of(context).appName,
-                        style: AppTextStyles.headline(context: context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          NavBar(title: AppLocalizations.of(context).applicationName),
           Expanded(
             child: BlocBuilder<WeatherCubit, WeatherState>(
               builder: (context, state) {

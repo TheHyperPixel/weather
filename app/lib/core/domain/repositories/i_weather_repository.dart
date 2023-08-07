@@ -6,4 +6,10 @@ abstract class IWeatherRepository {
     required double lon,
     required String unit,
   });
+
+  Future<List<Weather>> getForecast({
+    required double lat,
+    required double lon,
+    required String unit,
+  });
 }

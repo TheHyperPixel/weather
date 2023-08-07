@@ -1,3 +1,4 @@
+import 'package:app/core/domain/entities/location.dart';
 import 'package:app/core/presentation/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/screens/main_screen.dart';
@@ -15,7 +16,12 @@ class AppRoutesDelegate {
         builder = (BuildContext _) => const MainScreen();
         break;
       case AppRoutesDelegate.detail:
-        builder = (BuildContext _) => const DetailScreen();
+        builder = (BuildContext buildContext) {
+          return DetailScreen(
+            location:
+                ModalRoute.of(buildContext)!.settings.arguments as Location,
+          );
+        };
         break;
       default:
         builder = (BuildContext _) => SyncScreen();

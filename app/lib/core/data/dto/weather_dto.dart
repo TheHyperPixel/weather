@@ -22,6 +22,14 @@ class WeatherDto {
       _visibility = map['visibility'];
     }
 
+    int _dateTimeSeconds = map['dt'] as int;
+    int _timezoneOffset = 0;
+    if (map.containsKey('timezone')) {
+      _timezoneOffset = map['timezone'] as int;
+    }
+    DateTime _dateTime = DateTime.fromMillisecondsSinceEpoch(
+        (_dateTimeSeconds + _timezoneOffset) * 1000);
+
     return Weather(
       uuid: map['dt'].toString(),
       temp: double.parse(map['main']['temp'].toString()),
@@ -37,6 +45,7 @@ class WeatherDto {
       principle: map['weather'][0]['main'],
       description: map['weather'][0]['description'],
       icon: map['weather'][0]['icon'],
+      dateTime: _dateTime,
     );
   }
 }
