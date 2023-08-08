@@ -23,7 +23,7 @@ class AppLocalizations {
   }
 
   String get applicationName => Intl.message(
-        'Hyper Weather',
+        'Weather',
         name: 'applicationName',
         desc: 'The name of the app',
       );

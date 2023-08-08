@@ -192,7 +192,7 @@ class DetailScreen extends StatelessWidget {
         color: AppColorsDelegate.of(context).white,
         borderRadius: const AppBorderRadius.normal(),
       ),
-      child: MapFragment(
+      child: Map(
         coordinate: location.cityType.coordinate,
       ),
     );

@@ -1,14 +1,17 @@
 part of 'weather_cubit.dart';
 
 @immutable
-class WeatherState {
-  final CityType cityType;
+class WeatherState extends Equatable {
   final UnitType unitType;
 
   const WeatherState({
-    this.cityType = CityType.london,
     this.unitType = UnitType.metric,
   });
+
+  @override
+  List<Object?> get props => [
+        this.unitType,
+      ];
 }
 
 class WeatherStateInitial extends WeatherState {}
@@ -16,7 +19,6 @@ class WeatherStateInitial extends WeatherState {}
 class WeatherStateLoading extends WeatherState {
   const WeatherStateLoading({
     super.unitType,
-    super.cityType,
   });
 }
 
@@ -25,14 +27,18 @@ class WeatherStateSuccess extends WeatherState {
 
   const WeatherStateSuccess({
     super.unitType,
-    super.cityType,
     required this.locations,
   });
+
+  @override
+  List<Object?> get props => [
+        this.unitType,
+        this.locations,
+      ];
 }
 
 class WeatherStateFailure extends WeatherState {
   const WeatherStateFailure({
     super.unitType,
-    super.cityType,
   });
 }

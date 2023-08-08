@@ -4,6 +4,7 @@ import 'package:app/core/domain/enums/city_type.dart';
 import 'package:app/core/domain/enums/unit_type.dart';
 import 'package:app/core/domain/repositories/i_weather_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -13,14 +14,13 @@ part 'weather_state.dart';
 class WeatherCubit extends Cubit<WeatherState> {
   final IWeatherRepository _weatherRepository;
   UnitType _unitType = UnitType.metric;
-
+  final List<Location> _locations = [];
   WeatherCubit(
     this._weatherRepository,
   ) : super(WeatherStateInitial());
 
   loadAllWeather() async {
     try {
-      Set<Location> _locations = {};
       for (CityType _cityType in CityType.values) {
         try {
           Location _location = Location(
@@ -39,11 +39,10 @@ class WeatherCubit extends Cubit<WeatherState> {
         }
       }
 
-      if (_locations.isNotEmpty) {
-        emit(WeatherStateSuccess(locations: _locations.toList()));
-        return;
-      }
-      emit(const WeatherStateFailure());
+      emit(
+        WeatherStateSuccess(
+            locations: _locations.toList(), unitType: _unitType),
+      );
     } catch (e) {
       emit(const WeatherStateFailure());
     }
@@ -76,9 +75,17 @@ class WeatherCubit extends Cubit<WeatherState> {
     }
   }
 
-  changeUnitType({required UnitType unitType}) {
+  toggleUnitType() {
     try {
-      _unitType = unitType;
+      if (_unitType == UnitType.metric) {
+        _unitType = UnitType.imperial;
+      } else {
+        _unitType = UnitType.metric;
+      }
+      emit(
+        WeatherStateSuccess(
+            locations: _locations.toList(), unitType: _unitType),
+      );
     } catch (e) {
       _unitType = UnitType.metric;
     }

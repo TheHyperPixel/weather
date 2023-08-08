@@ -4,6 +4,7 @@ import 'package:app/core/domain/entities/coordinate.dart';
 import 'package:app/core/domain/enums/map_tile_type.dart';
 import 'package:app/core/domain/logic/map/map_cubit.dart';
 import 'package:app/core/presentation/components/app_base_button.dart';
+import 'package:app/core/presentation/constants/presentation_constants.dart';
 import 'package:app/core/presentation/fragments/bottom_sheet.dart';
 import 'package:app/core/presentation/localizations/app_localizations.dart';
 import 'package:app/core/presentation/styles/app_border_radius.dart';
@@ -18,12 +19,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapFragment extends StatefulWidget {
+class Map extends StatefulWidget {
   final Coordinate coordinate;
   final double mapViewButtonsOffset;
   final bool showControls;
 
-  const MapFragment({
+  const Map({
     super.key,
     required this.coordinate,
     this.mapViewButtonsOffset = 0,
@@ -31,14 +32,12 @@ class MapFragment extends StatefulWidget {
   });
 
   @override
-  State<MapFragment> createState() => _MapFragmentState();
+  State<Map> createState() => _MapState();
 }
 
-class _MapFragmentState extends State<MapFragment> {
+class _MapState extends State<Map> {
   late MapCubit _mapCubit;
   GoogleMapController? _mapController;
-  MapType _mapType = MapType.normal;
-  MapTileType _mapTileType = MapTileType.temperature;
   TileOverlay? _tileOverlay;
 
   @override
@@ -58,7 +57,6 @@ class _MapFragmentState extends State<MapFragment> {
 
   void _onMapCreated(GoogleMapController controller) {
     this._mapController = controller;
-    _updateTileOverlay();
   }
 
   void _clearTileOverlay() {
@@ -67,10 +65,10 @@ class _MapFragmentState extends State<MapFragment> {
     }
   }
 
-  void _updateTileOverlay() {
+  void _updateTileOverlay({required MapTileType mapTileType}) {
     final TileOverlay tileOverlay = TileOverlay(
-      tileOverlayId: TileOverlayId(_mapTileType.name),
-      tileProvider: _MapTileProvider(mapTileType: _mapTileType),
+      tileOverlayId: TileOverlayId(mapTileType.name),
+      tileProvider: _MapTileProvider(mapTileType: mapTileType),
     );
     setState(() {
       _tileOverlay = tileOverlay;
@@ -81,127 +79,144 @@ class _MapFragmentState extends State<MapFragment> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: this._mapCubit,
-      child: BlocBuilder<MapCubit, MapState>(
-        builder: (context, state) {
-          final Set<TileOverlay> overlays = <TileOverlay>{
-            if (_tileOverlay != null) _tileOverlay!,
-          };
-
-          if (state is MapStateSuccess) {
-            if (this._mapController != null) {
-              this._mapController!.animateCamera(
-                    CameraUpdate.newCameraPosition(
-                      CameraPosition(
-                        target:
-                            LatLng(state.coordinate.lat, state.coordinate.lon),
-                        zoom: 12,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<MapCubit, MapState>(
+            listenWhen: (previous, current) {
+              if (current is MapStateSuccess && this._mapController != null) {
+                return true;
+              }
+              return false;
+            },
+            listener: (context, state) {
+              if (state is MapStateSuccess && this._mapController != null) {
+                this._mapController!.animateCamera(
+                      CameraUpdate.newCameraPosition(
+                        CameraPosition(
+                          target: LatLng(
+                              state.coordinate.lat, state.coordinate.lon),
+                          zoom: 12,
+                        ),
                       ),
-                    ),
-                  );
-            }
-            if (Platform.isAndroid || Platform.isIOS) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  AppBaseButton(
-                    onTap: () {
-                      this.showMapTileTypeBottomSheet(context: context);
-                    },
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _mapTileType.title(
-                              appLocalizations: AppLocalizations.of(context),
-                            ),
-                            style: AppTextStyles.paragraph(context: context),
-                          ),
-                        ),
-                        Image.asset(
-                          AppIcons.iconChevronForward,
-                          color: AppColorsDelegate.of(context).dust,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: const AppBorderRadius.normal(),
-                      child: Stack(
+                    );
+              }
+            },
+          ),
+          BlocListener<MapCubit, MapState>(
+            listener: (context, state) {
+              // TODO: implement listener
+            },
+          ),
+        ],
+        child: BlocBuilder<MapCubit, MapState>(
+          builder: (context, state) {
+            final Set<TileOverlay> overlays = <TileOverlay>{
+              if (_tileOverlay != null) _tileOverlay!,
+            };
+
+            if (state is MapStateSuccess && this._mapController != null) {
+              if (Platform.isAndroid || Platform.isIOS) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AppBaseButton(
+                      onTap: () {
+                        this.showMapTileTypeBottomSheet(context: context);
+                      },
+                      child: Row(
                         children: [
-                          GoogleMap(
-                            onMapCreated: _onMapCreated,
-                            onTap: (position) {
-                              print(position);
-                            },
-                            onCameraMove: (position) {
-                              this._clearTileOverlay();
-                            },
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(
-                                  state.coordinate.lat, state.coordinate.lon),
-                              zoom: 12,
-                            ),
-                            mapToolbarEnabled: false,
-                            liteModeEnabled: false,
-                            tiltGesturesEnabled: false,
-                            myLocationButtonEnabled: false,
-                            mapType: _mapType,
-                            markers: const {},
-                            polylines: const {},
-                            circles: const {},
-                            polygons: const {},
-                            tileOverlays: overlays,
-                            gestureRecognizers:
-                                <Factory<EagerGestureRecognizer>>{}..add(
-                                    Factory<EagerGestureRecognizer>(
-                                      () => EagerGestureRecognizer(),
-                                    ),
-                                  ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: AppBaseButton(
-                              onTap: () {
-                                setState(() {
-                                  if (this._mapType == MapType.normal) {
-                                    _mapType = MapType.satellite;
-                                  } else {
-                                    _mapType = MapType.normal;
-                                  }
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: AppColorsDelegate.of(context).white,
-                                  borderRadius: const AppBorderRadius.normal(),
-                                ),
-                                child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Image.asset(
-                                    AppIcons.iconMap,
-                                    color: AppColorsDelegate.of(context).coal,
-                                  ),
-                                ),
+                          Expanded(
+                            child: Text(
+                              state.mapTileType.title(
+                                appLocalizations: AppLocalizations.of(context),
                               ),
+                              style: AppTextStyles.paragraph(context: context),
                             ),
+                          ),
+                          Image.asset(
+                            AppIcons.iconChevronForward,
+                            color: AppColorsDelegate.of(context).dust,
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              );
+                    const SizedBox(height: 10),
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: ClipRRect(
+                        borderRadius: const AppBorderRadius.normal(),
+                        child: Stack(
+                          children: [
+                            GoogleMap(
+                              onMapCreated: _onMapCreated,
+                              onTap: (position) {
+                                print(position);
+                              },
+                              onCameraMove: (position) {
+                                this._clearTileOverlay();
+                              },
+                              initialCameraPosition: CameraPosition(
+                                target: LatLng(
+                                    state.coordinate.lat, state.coordinate.lon),
+                                zoom: 12,
+                              ),
+                              mapToolbarEnabled: false,
+                              liteModeEnabled: false,
+                              tiltGesturesEnabled: false,
+                              myLocationButtonEnabled: false,
+                              mapType: state.mapType,
+                              markers: const {},
+                              polylines: const {},
+                              circles: const {},
+                              polygons: const {},
+                              tileOverlays: overlays,
+                              gestureRecognizers:
+                                  <Factory<EagerGestureRecognizer>>{}..add(
+                                      Factory<EagerGestureRecognizer>(
+                                        () => EagerGestureRecognizer(),
+                                      ),
+                                    ),
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: AppBaseButton(
+                                onTap: () {
+                                  _mapCubit.toggleMapType();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: AppColorsDelegate.of(context).white,
+                                    borderRadius:
+                                        const AppBorderRadius.normal(),
+                                  ),
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Image.asset(
+                                      AppIcons.iconMap,
+                                      color: AppColorsDelegate.of(context).coal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
             }
-            return const SizedBox.shrink();
-          }
-          return const SizedBox.shrink();
-        },
+            return Center(
+              child: CircularProgressIndicator(
+                  color: AppColorsDelegate.of(context).aqua),
+            );
+          },
+        ),
       ),
     );
   }
@@ -229,11 +244,9 @@ class _MapFragmentState extends State<MapFragment> {
               for (MapTileType _mapTileType in MapTileType.values) ...[
                 AppBaseButton(
                   onTap: () {
-                    setState(() {
-                      this._mapTileType = _mapTileType;
-                    });
+                    this._mapCubit.changeMapTileType(mapTileType: _mapTileType);
                     this._clearTileOverlay();
-                    this._updateTileOverlay();
+                    this._updateTileOverlay(mapTileType: _mapTileType);
                     Navigator.of(context).pop();
                   },
                   child: Padding(
@@ -271,9 +284,9 @@ class _MapTileProvider implements TileProvider {
   @override
   Future<Tile> getTile(int x, int y, int? zoom) async {
     Uint8List bytes = (await NetworkAssetBundle(Uri.parse(
-                'https://tile.openweathermap.org/map/${mapTileType.apiName}/$zoom/$x/$y.png?appid=de8c5572c3684f9ce1b2cb026c9b0b20'))
+                '${PresentationConstants.openWeatherTileBaseUrl}{mapTileType.apiName}/$zoom/$x/$y.png?appid=de8c5572c3684f9ce1b2cb026c9b0b20'))
             .load(
-                'https://tile.openweathermap.org/map/${mapTileType.apiName}/$zoom/$x/$y.png?appid=de8c5572c3684f9ce1b2cb026c9b0b20'))
+                '${PresentationConstants.openWeatherTileBaseUrl}{mapTileType.apiName}/$zoom/$x/$y.png?appid=de8c5572c3684f9ce1b2cb026c9b0b20'))
         .buffer
         .asUint8List();
 
