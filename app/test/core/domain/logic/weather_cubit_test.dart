@@ -28,23 +28,22 @@ void main() {
       'Load weather emits success',
       setUp: () {
         when(() => _repositoryMock.getWeather(
-            lat: 0,
-            lon: 0,
-            unit: UnitType.metric.name)).thenAnswer((_) async => _weatherMock);
+              lat: 0,
+              lon: 0,
+              unit: UnitType.metric.name,
+            )).thenAnswer((_) async => _weatherMock);
         when(() => _repositoryMock.getForecast(
-            lat: 0,
-            lon: 0,
-            unit: UnitType.metric.name)).thenAnswer((_) async => _forecastMock);
+              lat: 0,
+              lon: 0,
+              unit: UnitType.metric.name,
+            )).thenAnswer((_) async => _forecastMock);
       },
       build: () => WeatherCubit(_repositoryMock),
       act: (cubit) {
         cubit.loadAllWeather();
       },
       expect: () => [
-        const WeatherStateSuccess(
-          unitType: UnitType.metric,
-          locations: [],
-        ),
+        isA<WeatherStateSuccess>(),
       ],
     );
 

@@ -1,1 +1,0 @@
-class UserProfileNotFoundException implements Exception {}

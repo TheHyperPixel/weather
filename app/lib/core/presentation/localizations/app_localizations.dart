@@ -58,10 +58,16 @@ class AppLocalizations {
         desc: 'Name for location enum Glasgow',
       );
 
-  String get cityTypeTitleManchester => Intl.message(
-        'Manchester',
-        name: 'cityTypeTitleManchester',
-        desc: 'Copyright Name for location enum Manchester',
+  String get cityTypeTitleCardiff => Intl.message(
+        'Cardiff',
+        name: 'cityTypeTitleCardiff',
+        desc: 'Copyright Name for location enum Cardiff',
+      );
+
+  String get cityTypeTitleCambridge => Intl.message(
+        'Cambridge',
+        name: 'cityTypeTitleCambridge',
+        desc: 'Copyright Name for location enum Cambridge',
       );
 
   String get feelsLike => Intl.message(
@@ -74,6 +80,24 @@ class AppLocalizations {
         'Highs / Lows',
         name: 'highsLows',
         desc: 'highsLows',
+      );
+
+  String get pressure => Intl.message(
+        'Pressure',
+        name: 'pressure',
+        desc: 'pressure',
+      );
+
+  String get humidity => Intl.message(
+        'Humidity',
+        name: 'humidity',
+        desc: 'humidity',
+      );
+
+  String get visibility => Intl.message(
+        'Visibility',
+        name: 'visibility',
+        desc: 'visibility',
       );
 
   String get mapTileTypeClouds => Intl.message(
@@ -104,6 +128,24 @@ class AppLocalizations {
         'Pressure',
         name: 'mapTileTypePressure',
         desc: 'mapTileTypePressure',
+      );
+
+  String get errorTitle => Intl.message(
+        'Error',
+        name: 'errorTitle',
+        desc: 'errorTitle',
+      );
+
+  String get errorDescription => Intl.message(
+        'An unknown error occured. We\'re really sorry about this. It could be your internet connection, but is more likely the servers our side. Please wait a few minutes and try again.',
+        name: 'errorDescription',
+        desc: 'errorDescription',
+      );
+
+  String get retry => Intl.message(
+        'retry',
+        name: 'retry',
+        desc: 'retry',
       );
 }
 

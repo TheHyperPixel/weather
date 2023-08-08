@@ -1,1 +1,0 @@
-class UserLegalNotFoundException implements Exception {}

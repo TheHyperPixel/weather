@@ -1,1 +1,0 @@
-class NonMatchingPasswordsException implements Exception {}

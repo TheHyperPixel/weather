@@ -1,1 +1,0 @@
-class UserNotificationsNotFoundException implements Exception {}

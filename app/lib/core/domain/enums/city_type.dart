@@ -5,7 +5,8 @@ enum CityType {
   norwich,
   london,
   glasgow,
-  manchester,
+  cardiff,
+  cambridge,
 }
 
 extension CityTypeExtension on CityType {
@@ -17,8 +18,10 @@ extension CityTypeExtension on CityType {
         return const Coordinate(lat: 51.5072, lon: 0.1276);
       case CityType.glasgow:
         return const Coordinate(lat: 55.8617, lon: -4.2583);
-      case CityType.manchester:
-        return const Coordinate(lat: 53.4808, lon: 2.2426);
+      case CityType.cardiff:
+        return const Coordinate(lat: 51.4849, lon: -3.1763);
+      case CityType.cambridge:
+        return const Coordinate(lat: 52.2048, lon: 0.1197);
     }
   }
 
@@ -30,8 +33,10 @@ extension CityTypeExtension on CityType {
         return appLocalizations.cityTypeTitleLondon;
       case CityType.glasgow:
         return appLocalizations.cityTypeTitleGlasgow;
-      case CityType.manchester:
-        return appLocalizations.cityTypeTitleManchester;
+      case CityType.cardiff:
+        return appLocalizations.cityTypeTitleCardiff;
+      case CityType.cambridge:
+        return appLocalizations.cityTypeTitleCambridge;
     }
   }
 }

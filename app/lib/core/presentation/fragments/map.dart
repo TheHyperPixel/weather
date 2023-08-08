@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/core/data/constants/data_constants.dart';
 import 'package:app/core/domain/entities/coordinate.dart';
 import 'package:app/core/domain/enums/map_tile_type.dart';
 import 'package:app/core/domain/logic/map/map_cubit.dart';
@@ -55,8 +56,12 @@ class _MapState extends State<Map> {
     super.dispose();
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated({
+    required GoogleMapController controller,
+    required MapTileType mapTileType,
+  }) {
     this._mapController = controller;
+    _updateTileOverlay(mapTileType: mapTileType);
   }
 
   void _clearTileOverlay() {
@@ -79,144 +84,117 @@ class _MapState extends State<Map> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: this._mapCubit,
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<MapCubit, MapState>(
-            listenWhen: (previous, current) {
-              if (current is MapStateSuccess && this._mapController != null) {
-                return true;
-              }
-              return false;
-            },
-            listener: (context, state) {
-              if (state is MapStateSuccess && this._mapController != null) {
-                this._mapController!.animateCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(
-                          target: LatLng(
-                              state.coordinate.lat, state.coordinate.lon),
-                          zoom: 12,
+      child: BlocBuilder<MapCubit, MapState>(
+        builder: (context, state) {
+          final Set<TileOverlay> overlays = <TileOverlay>{
+            if (_tileOverlay != null) _tileOverlay!,
+          };
+          if (state is MapStateSuccess) {
+            if (Platform.isAndroid || Platform.isIOS) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppBaseButton(
+                    onTap: () {
+                      this.showMapTileTypeBottomSheet(context: context);
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            state.mapTileType.title(
+                              appLocalizations: AppLocalizations.of(context),
+                            ),
+                            style: AppTextStyles.paragraph(context: context),
+                          ),
                         ),
-                      ),
-                    );
-              }
-            },
-          ),
-          BlocListener<MapCubit, MapState>(
-            listener: (context, state) {
-              // TODO: implement listener
-            },
-          ),
-        ],
-        child: BlocBuilder<MapCubit, MapState>(
-          builder: (context, state) {
-            final Set<TileOverlay> overlays = <TileOverlay>{
-              if (_tileOverlay != null) _tileOverlay!,
-            };
-
-            if (state is MapStateSuccess && this._mapController != null) {
-              if (Platform.isAndroid || Platform.isIOS) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    AppBaseButton(
-                      onTap: () {
-                        this.showMapTileTypeBottomSheet(context: context);
-                      },
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              state.mapTileType.title(
-                                appLocalizations: AppLocalizations.of(context),
-                              ),
-                              style: AppTextStyles.paragraph(context: context),
-                            ),
-                          ),
-                          Image.asset(
-                            AppIcons.iconChevronForward,
-                            color: AppColorsDelegate.of(context).dust,
-                          ),
-                        ],
-                      ),
+                        Image.asset(
+                          AppIcons.iconChevronForward,
+                          color: AppColorsDelegate.of(context).dust,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        borderRadius: const AppBorderRadius.normal(),
-                        child: Stack(
-                          children: [
-                            GoogleMap(
-                              onMapCreated: _onMapCreated,
-                              onTap: (position) {
-                                print(position);
-                              },
-                              onCameraMove: (position) {
-                                this._clearTileOverlay();
-                              },
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(
-                                    state.coordinate.lat, state.coordinate.lon),
-                                zoom: 12,
-                              ),
-                              mapToolbarEnabled: false,
-                              liteModeEnabled: false,
-                              tiltGesturesEnabled: false,
-                              myLocationButtonEnabled: false,
-                              mapType: state.mapType,
-                              markers: const {},
-                              polylines: const {},
-                              circles: const {},
-                              polygons: const {},
-                              tileOverlays: overlays,
-                              gestureRecognizers:
-                                  <Factory<EagerGestureRecognizer>>{}..add(
-                                      Factory<EagerGestureRecognizer>(
-                                        () => EagerGestureRecognizer(),
-                                      ),
-                                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: ClipRRect(
+                      borderRadius: const AppBorderRadius.normal(),
+                      child: Stack(
+                        children: [
+                          GoogleMap(
+                            onMapCreated: (controller) {
+                              _onMapCreated(
+                                controller: controller,
+                                mapTileType: state.mapTileType,
+                              );
+                            },
+                            onTap: (position) {
+                              print(position);
+                            },
+                            onCameraMove: (position) {
+                              this._clearTileOverlay();
+                            },
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                  state.coordinate.lat, state.coordinate.lon),
+                              zoom: 12,
                             ),
-                            Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: AppBaseButton(
-                                onTap: () {
-                                  _mapCubit.toggleMapType();
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: AppColorsDelegate.of(context).white,
-                                    borderRadius:
-                                        const AppBorderRadius.normal(),
-                                  ),
-                                  child: SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: Image.asset(
-                                      AppIcons.iconMap,
-                                      color: AppColorsDelegate.of(context).coal,
+                            mapToolbarEnabled: false,
+                            liteModeEnabled: false,
+                            tiltGesturesEnabled: false,
+                            myLocationButtonEnabled: false,
+                            mapType: state.mapType,
+                            markers: const {},
+                            polylines: const {},
+                            circles: const {},
+                            polygons: const {},
+                            tileOverlays: overlays,
+                            gestureRecognizers:
+                                <Factory<EagerGestureRecognizer>>{}..add(
+                                    Factory<EagerGestureRecognizer>(
+                                      () => EagerGestureRecognizer(),
                                     ),
+                                  ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: AppBaseButton(
+                              onTap: () {
+                                _mapCubit.toggleMapType();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: AppColorsDelegate.of(context).white,
+                                  borderRadius: const AppBorderRadius.normal(),
+                                ),
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                    AppIcons.iconMap,
+                                    color: AppColorsDelegate.of(context).coal,
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                );
-              }
-              return const SizedBox.shrink();
+                  ),
+                ],
+              );
             }
-            return Center(
-              child: CircularProgressIndicator(
-                  color: AppColorsDelegate.of(context).aqua),
-            );
-          },
-        ),
+            return const SizedBox.shrink();
+          }
+          return Center(
+            child: CircularProgressIndicator(
+                color: AppColorsDelegate.of(context).aqua),
+          );
+        },
       ),
     );
   }
@@ -284,9 +262,9 @@ class _MapTileProvider implements TileProvider {
   @override
   Future<Tile> getTile(int x, int y, int? zoom) async {
     Uint8List bytes = (await NetworkAssetBundle(Uri.parse(
-                '${PresentationConstants.openWeatherTileBaseUrl}{mapTileType.apiName}/$zoom/$x/$y.png?appid=de8c5572c3684f9ce1b2cb026c9b0b20'))
+                '${PresentationConstants.openWeatherTileBaseUrl}${mapTileType.apiName}/$zoom/$x/$y.png?appid=${DataConstants.appId}'))
             .load(
-                '${PresentationConstants.openWeatherTileBaseUrl}{mapTileType.apiName}/$zoom/$x/$y.png?appid=de8c5572c3684f9ce1b2cb026c9b0b20'))
+                '${PresentationConstants.openWeatherTileBaseUrl}${mapTileType.apiName}/$zoom/$x/$y.png?appid=${DataConstants.appId}'))
         .buffer
         .asUint8List();
 

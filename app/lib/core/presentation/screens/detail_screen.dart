@@ -179,6 +179,45 @@ class DetailScreen extends StatelessWidget {
               ),
             ],
           ),
+          Row(
+            children: [
+              Text(
+                AppLocalizations.of(context).pressure,
+                style: AppTextStyles.paragraph(context: context),
+              ),
+              const Spacer(),
+              Text(
+                '${location.weather.pressure.round().toString()}hPa',
+                style: AppTextStyles.paragraph(context: context),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                AppLocalizations.of(context).humidity,
+                style: AppTextStyles.paragraph(context: context),
+              ),
+              const Spacer(),
+              Text(
+                '${location.weather.humidity.round().toString()}%',
+                style: AppTextStyles.paragraph(context: context),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                AppLocalizations.of(context).visibility,
+                style: AppTextStyles.paragraph(context: context),
+              ),
+              const Spacer(),
+              Text(
+                '${location.weather.visibility.round().toString()}m',
+                style: AppTextStyles.paragraph(context: context),
+              ),
+            ],
+          ),
         ],
       ),
     );

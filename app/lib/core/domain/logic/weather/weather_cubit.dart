@@ -14,13 +14,14 @@ part 'weather_state.dart';
 class WeatherCubit extends Cubit<WeatherState> {
   final IWeatherRepository _weatherRepository;
   UnitType _unitType = UnitType.metric;
-  final List<Location> _locations = [];
+  final Set<Location> _locations = {};
   WeatherCubit(
     this._weatherRepository,
   ) : super(WeatherStateInitial());
 
   loadAllWeather() async {
     try {
+      _locations.clear();
       for (CityType _cityType in CityType.values) {
         try {
           Location _location = Location(
@@ -33,15 +34,14 @@ class WeatherCubit extends Cubit<WeatherState> {
           _locations.add(_location);
         } catch (e) {
           //gracefully ignore single location weather API error
-          if (kDebugMode) {
-            print(e);
-          }
         }
       }
 
       emit(
         WeatherStateSuccess(
-            locations: _locations.toList(), unitType: _unitType),
+          locations: _locations.toList(),
+          unitType: _unitType,
+        ),
       );
     } catch (e) {
       emit(const WeatherStateFailure());
@@ -84,7 +84,9 @@ class WeatherCubit extends Cubit<WeatherState> {
       }
       emit(
         WeatherStateSuccess(
-            locations: _locations.toList(), unitType: _unitType),
+          locations: _locations.toList(),
+          unitType: _unitType,
+        ),
       );
     } catch (e) {
       _unitType = UnitType.metric;
