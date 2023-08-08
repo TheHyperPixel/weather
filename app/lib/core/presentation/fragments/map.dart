@@ -158,7 +158,7 @@ class _MapState extends State<Map> {
                                   ),
                           ),
                           Positioned(
-                            bottom: 10,
+                            top: 10,
                             right: 10,
                             child: AppBaseButton(
                               onTap: () {
