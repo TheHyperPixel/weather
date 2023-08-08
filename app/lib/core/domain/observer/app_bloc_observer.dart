@@ -1,4 +1,3 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -12,8 +11,6 @@ class AppBlocObserver implements BlocObserver {
     if (!kReleaseMode) {
       print(error);
     }
-
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
   }
 
   @override
