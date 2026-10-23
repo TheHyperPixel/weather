@@ -31,4 +31,7 @@ class AppBlocObserver implements BlocObserver {
 
   @override
   void onCreate(BlocBase cubit) {}
+
+  @override
+  void onDone(Bloc bloc, Object? error, [Object? data, StackTrace? stackTrace]) {}
 }

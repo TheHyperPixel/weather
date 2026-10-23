@@ -19,7 +19,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  // ignore: strict_top_level_inference
   final messages = _notInlinedMessages(_notInlinedMessages);
+  // ignore: strict_top_level_inference
   static _notInlinedMessages(_) => <String, Function>{
         "appName": MessageLookupByLibrary.simpleMessage("App")
       };

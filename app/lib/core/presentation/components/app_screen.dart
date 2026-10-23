@@ -13,7 +13,7 @@ class AppScreen extends StatefulWidget {
   final Color? backgroundColor;
 
   const AppScreen({
-    Key? key,
+    super.key,
     required this.child,
     this.systemBackEnabled = true,
     this.preferredOrientations = const [DeviceOrientation.portraitUp],
@@ -21,7 +21,7 @@ class AppScreen extends StatefulWidget {
     this.bottomSafeArea = false,
     this.resizeToAvoidBottomInset,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   _AppScreenState createState() => _AppScreenState();
@@ -81,8 +81,8 @@ class _AppScreenState extends State<AppScreen> with RouteAware {
     if (this.widget.systemBackEnabled) {
       return scaffold;
     } else {
-      return WillPopScope(
-        onWillPop: () => Future.value(false),
+      return PopScope(
+        canPop: false,
         child: scaffold,
       );
     }

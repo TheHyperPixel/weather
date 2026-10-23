@@ -5,10 +5,10 @@ class AppColorsDelegate extends InheritedWidget {
   final AppColorsSchemeBase appColorsScheme;
 
   const AppColorsDelegate({
-    Key? key,
+    super.key,
     required this.appColorsScheme,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   static AppColorsDelegate of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppColorsDelegate>()
