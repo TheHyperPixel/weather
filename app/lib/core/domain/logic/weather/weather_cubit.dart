@@ -19,7 +19,7 @@ class WeatherCubit extends Cubit<WeatherState> {
     this._weatherRepository,
   ) : super(WeatherStateInitial());
 
-  loadAllWeather() async {
+  Future<void> loadAllWeather() async {
     try {
       _locations.clear();
       for (CityType _cityType in CityType.values) {
@@ -75,7 +75,7 @@ class WeatherCubit extends Cubit<WeatherState> {
     }
   }
 
-  toggleUnitType() {
+  void toggleUnitType() {
     try {
       if (_unitType == UnitType.metric) {
         _unitType = UnitType.imperial;

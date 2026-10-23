@@ -31,13 +31,13 @@ class BottomSheetWidget extends StatelessWidget {
   final String title;
   final void Function()? onTapClose;
   const BottomSheetWidget({
-    Key? key,
+    super.key,
     this.color,
     this.margin,
     this.title = '',
     required this.child,
     this.onTapClose,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

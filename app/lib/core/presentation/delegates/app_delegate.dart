@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 RouteObserver routeObserver = RouteObserver();
 
 class AppDelegate extends StatefulWidget {
-  const AppDelegate({Key? key}) : super(key: key);
+  const AppDelegate({super.key});
 
   @override
   _AppDelegateState createState() => _AppDelegateState();
@@ -60,13 +60,12 @@ class _AppDelegateState extends State<AppDelegate> {
 
             return AppColorsDelegate(
               appColorsScheme: _colorScheme,
-              child: WillPopScope(
-                onWillPop: () async {
+              child: PopScope(
+                onPopInvokedWithResult: (didPop, result) async {
+                  if (didPop) return;
                   if (this._navigatorKey.currentState!.canPop()) {
                     this._navigatorKey.currentState!.pop();
-                    return false;
-                  } else {
-                    return true;
+                    return;
                   }
                 },
                 child: Navigator(

@@ -15,7 +15,7 @@ class MapCubit extends Cubit<MapState> {
   MapType _mapType = MapType.normal;
   MapTileType _mapTileType = MapTileType.temperature;
 
-  loadMap({required Coordinate coordinate}) {
+  void loadMap({required Coordinate coordinate}) {
     try {
       this._coordinate = coordinate;
       emit(
@@ -30,7 +30,7 @@ class MapCubit extends Cubit<MapState> {
     }
   }
 
-  toggleMapType() {
+  void toggleMapType() {
     try {
       if (this._mapType == MapType.normal) {
         _mapType = MapType.satellite;
@@ -49,7 +49,7 @@ class MapCubit extends Cubit<MapState> {
     }
   }
 
-  changeMapTileType({required MapTileType mapTileType}) {
+  void changeMapTileType({required MapTileType mapTileType}) {
     try {
       this._mapTileType = mapTileType;
       emit(

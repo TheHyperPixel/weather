@@ -10,14 +10,14 @@ class AppBaseButton extends StatefulWidget {
   final void Function()? onHoverOut;
 
   const AppBaseButton({
-    Key? key,
+    super.key,
     this.tooltip,
     required this.child,
     this.systemMouseCursor,
     this.onTap,
     this.onHoverIn,
     this.onHoverOut,
-  }) : super(key: key);
+  });
 
   @override
   _AppBaseButtonState createState() => _AppBaseButtonState();
